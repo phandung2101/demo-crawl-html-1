@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Piggy Data",
+  "description": "A personal tool (Testing only)",
+  "version": "0.0.1",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_icon": "images/pig-icon.png",
+    "default_title": "Dã vào me",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "images/pig-icon.png",
+    "128": "images/pig-icon.png"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "scripts/popup.js",
+        "scripts/crawler.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
