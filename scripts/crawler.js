@@ -6,6 +6,30 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     }
 });
 
+function getDetailLaiSuat() {
+    const dateContent = document
+        .getElementsByClassName("jrPage")[1]
+        .getElementsByTagName("tr")[8]
+        .getElementsByTagName("td")[2].textContent;
+    const moneyContent = document
+        .getElementsByClassName("jrPage")[1]
+        .getElementsByTagName("tr")[5]
+        .getElementsByTagName("td")[2].textContent;
+    return {dateContent, moneyContent};
+}
+
+function getDetailTyGiaTrungTam() {
+    const dateContent = document
+        .getElementsByClassName("jrPage")[1]
+        .getElementsByTagName("tr")[8]
+        .getElementsByTagName("td")[2].textContent;
+    const moneyContent = document
+        .getElementsByClassName("jrPage")[1]
+        .getElementsByTagName("tr")[5]
+        .getElementsByTagName("td")[2].textContent;
+    return {dateContent, moneyContent};
+}
+
 async function crawlPage(page) {
     const length = document.getElementsByClassName("af_table_data-row").length;
     const data = [];
@@ -13,15 +37,8 @@ async function crawlPage(page) {
         if (i > 0 && page > 1) {
             await navigateToPage(page);
         }
-        const dateContent = document
-            .getElementsByClassName("af_table_data-row")
-            [i].getElementsByClassName("af_inputDate_content")[0].textContent;
         await goDetail(i);
-
-        const moneyContent = document
-            .getElementsByClassName("jrPage")[1]
-            .getElementsByTagName("tr")[5]
-            .getElementsByTagName("td")[2].textContent;
+        const {dateContent, moneyContent} = getDetailTyGiaTrungTam();
         await goBack();
         const rawData = {
             dateContent,
@@ -65,11 +82,12 @@ async function crawlAllPage() {
     let finalResult = [];
     console.log('start crawl all page')
     try {
-        const totalPage = Number(
-            document
-                .getElementsByClassName("af_table_navbar-row-range-text")[1]
-                .textContent.split(" ")[1]
-        );
+        const pageDOMs = document
+            .getElementsByClassName("af_table_navbar-row-range-text");
+        let totalPage = 1;
+        if (pageDOMs.length > 0) {
+            totalPage = Number(pageDOMs[1].textContent.split(" ")[1]);
+        }
         // first page
         finalResult = [await crawlPage(1)];
         let nextPage = 2;
