@@ -41,8 +41,7 @@ async function crawlPage(page) {
         const {dateContent, moneyContent} = getDetailTyGiaTrungTam();
         await goBack();
         const rawData = {
-            dateContent,
-            moneyContent,
+            dateContent, moneyContent,
         };
         console.log("this is data", dateContent + " | " + moneyContent);
         data.push(rawData);
@@ -65,9 +64,7 @@ async function goDetail(i) {
 }
 
 async function goBack() {
-    const backButton = document.getElementsByClassName(
-        "button-back af_commandLink"
-    )[0];
+    const backButton = document.getElementsByClassName("button-back af_commandLink")[0];
     if (backButton) {
         backButton.click();
         await timeout(900);
@@ -102,25 +99,20 @@ async function crawlAllPage() {
     return finalResult;
 }
 
-async function navigateToPage(page) {
-    const pageInput = document.getElementsByClassName(
-        "af_table_navbar-page-input"
-    )[0];
-    pageInput.dispatchEvent(new Event("mouseover"));
-    pageInput.value = page;
-    const enterEvent = new KeyboardEvent("keydown", {
-        key: "Enter",
-        bubbles: true,
-        cancelable: true,
-        keyCode: 13,
-        which: 13,
-    });
-
-    pageInput.dispatchEvent(enterEvent);
-    console.log("navigateToPage", page);
-    await timeout(2500);
-}
-
 function timeout(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function getFirstAndLastDay(input) {
+    const [month, year] = input.split('/');
+    const firstDay = new Date(`${month}/01/${year}`);
+    const lastDay = new Date(firstDay);
+    lastDay.setMonth(lastDay.getMonth() + 1);
+    lastDay.setDate(lastDay.getDate() - 1);
+    const firstDayFormatted = `${('0' + (firstDay.getDate())).slice(-2)}/${('0' + (firstDay.getMonth() + 1)).slice(-2)}/${firstDay.getFullYear()}`;
+    const lastDayFormatted = `${('0' + (lastDay.getDate())).slice(-2)}/${('0' + (lastDay.getMonth() + 1)).slice(-2)}/${lastDay.getFullYear()}`;
+    return {
+        firstDayFormatted,
+        lastDayFormatted
+    };
 }
